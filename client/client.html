@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+  <section id="top">
+    <h3>POST Status Code Tests</h3>
+    <form id="nameForm" action="/addUser" method="post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="age">Age: </label>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input type="submit" value="Add User" />
+    </form>
+    <form id="userForm" action="/getUsers" method="get">
+      <select id='urlField'>
+        <option value='/getUsers'>/getUsers</option>
+        <option value='/notReal'>/notReal</option>
+      </select>
+      <select id="methodSelect">
+        <option value="get">GET</option>
+        <option value="head">HEAD</option>
+      </select>
+      <input type="submit" value="Get User" />
+    </form>
+  </section>
+  <section id="content">
+    <h2 id="messageTitle" style="font-weight: bold;"></h2>
+    <div id="messageOutput"></div>
+  </section>
+
+  <script>
+
+    /*Author: Andrew Black, w/ starter code from Austin Willoughby
+     *Purpose: internal js script handles utilizing the HTML functionality to allow the user to 
+     *send fetch requests to receive a status code (purely for API purposes)
+     *NOTE: functionalitiy for:
+     *GET, HEAD, and POST requests
+     */
+
+    // function for adding users to a users object in jsonResponses.js,
+    // utilizes POST only
+    const handleAddUser = async (event) => {
+
+      // stop the page from refreshing all the darn time
+      event.preventDefault();
+
+      const name = document.getElementById('nameField').value;
+      const age = document.getElementById('ageField').value;
+
+      const body = JSON.stringify({ name, age });
+
+      try {
+        const response = await fetch('/addUser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+
+        const messageTitle = document.getElementById('messageTitle');
+        const messageOutput = document.getElementById('messageOutput');
+
+        //based on responseCode, output message to user indicating success
+        //note that the network tab should display the message and id
+        if (response.status === 201) {
+          messageTitle.innerText = 'Created';
+          messageOutput.innerText = 'Message: Created Successfully';
+        } else if (response.status === 204) {
+          messageTitle.innerText = 'Updated (No Content)';
+          messageOutput.innerText = 'Message: Updated Successfully';
+        } else if (response.status === 400) {
+          const errorData = await response.json();
+          messageTitle.innerText = 'Bad Request';
+          messageOutput.innerText = "Message: Name and Age are both Required";
+        }
+      } catch (error) {
+        console.error('Something went horribly wrong. Error:', error);
+      }
+    };
+
+    // function for getting user object in jsonResponses.js,
+    // utilizes either GET or HEAD depending on client request
+    const handleGetUser = async (event) => {
+      event.preventDefault(); 
+
+      const url = document.getElementById('urlField').value;
+      const method = document.getElementById('methodSelect').value.toUpperCase();
+
+      try {
+        const response = await fetch(url, {
+          method,
+        });
+
+        const messageTitle = document.getElementById('messageTitle');
+        const messageOutput = document.getElementById('messageOutput');
+
+        // note that if the method is HEAD, we don't parse any JSON (there isn't any, after all)
+        // and we just set the client side messages
+        if (response.ok) {
+          if (method === 'HEAD') {
+            messageTitle.innerText = 'Success';
+            messageOutput.innerText = ''; 
+          } else { 
+            const data = await response.json();
+            messageTitle.innerText = 'Success';
+            messageOutput.innerText = JSON.stringify(data); 
+          }
+        } else if (response.status === 404) {
+          if (method === 'HEAD') {
+            messageTitle.innerText = 'Not Found';
+            messageOutput.innerText = ''; 
+          } else { 
+            const errorData = await response.json();
+            messageTitle.innerText = 'Not Found';
+            messageOutput.innerText = 'Message: The Page you Are Looking For was Not Found';
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    // add event listeners to the addUser and getUser buttons 
+    window.onload = () => {
+      document.getElementById('nameForm').addEventListener('submit', handleAddUser);
+      document.getElementById('userForm').addEventListener('submit', handleGetUser);
+    };
+  </script>
+</body>
+</html>
