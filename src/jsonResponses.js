@@ -1,5 +1,5 @@
 // storage of Pokemon added by client side
-import pokemonJSON from '../data/pokedex.json';
+const pokemonJSON = require('../data/pokedex.json');
 
 // function for handling JSON responses
 const respondJSON = (request, response, status, object) => {
@@ -57,12 +57,13 @@ const addPokemon = (request, response) => {
     const bodyString = Buffer.concat(body).toString();
     const params = JSON.parse(bodyString);
 
-    // if there's an issue with required params, through the 400 at em
+    // if there's an issue with required params, throw the 400 at em
     // note that the params are not abritrary - you'll notice that Weaknesses
     // is not included. This is because of the api scope I'm trying to achieve
 
     // a user should be able to add any pokemon they see fit, real or not
-    // sometimes a pokemon may not have a weakness (see, Sableye, Spiritomb pre Fairy Type)
+    // weaknesses should be based off the pokemons type and are a function
+    // in the utilities.js file
     // sometimes a pokemon may be custom and not have evolutions
     // therefor, there's always the possibility someone enters a real pokemon but
     // fudges the information. There is no code that could reliably predict that,
@@ -86,7 +87,7 @@ const addPokemon = (request, response) => {
   });
 };
 
-export {
+module.export = {
   respondJSON,
   getPokemon,
   addPokemon,

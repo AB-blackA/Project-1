@@ -19,7 +19,13 @@ const urlStruct = {
   GET: {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
+    // returns all Pokemon
     '/getPokemon': jsonHandler.getUsers,
+
+    // returns by specifics
+    '/getPokemonById' : jsonHandler.getPokemonById,
+    '/getPokemonByHeight' : jsonHandler.getPokemonByHeight,
+    '/getPokemonByType' : jsonHandler.getPokemonByHeight,
     '/notReal': jsonHandler.notReal,
   },
   HEAD: {
