@@ -30,12 +30,12 @@ const urlStruct = {
     '/getPokemonByType': jsonHandler.getPokemonByHeight,
   },
   HEAD: {
-    '/getPokemon': jsonHandler.headPokemon,
-    '/getPokemonById': jsonHandler.headPokemonById,
-    '/getPokemonByName': jsonHandler.headPokemonByName,
-    '/getPokemonByHeight': jsonHandler.headPokemonByHeight,
-    '/getPokemonByWeight': jsonHandler.headPokemonByWeight,
-    '/getPokemonByType': jsonHandler.headPokemonByType,
+    '/headPokemon': jsonHandler.headPokemon,
+    '/headPokemonById': jsonHandler.headPokemonById,
+    '/headPokemonByName': jsonHandler.headPokemonByName,
+    '/headPokemonByHeight': jsonHandler.headPokemonByHeight,
+    '/headPokemonByWeight': jsonHandler.headPokemonByWeight,
+    '/headPokemonByType': jsonHandler.headPokemonByType,
   },
   POST: {
     '/addPokemon': jsonHandler.addPokemon,
