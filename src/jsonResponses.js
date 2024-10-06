@@ -5,9 +5,12 @@
  * TO DO LIST
  * 1) update and move utility functions NOT related to json responses to a different file
  * - currently, this is determineDupes, determineWeaknesses, and errorMessage
- * 2) update 'addPokemon' method to have proper logic for determining the proper 'num' and 'evolutions'
- * 3) update 'addPokemon' to sort any newly added Pokemon to the proper index (currently, just pushes all)
- * - new Pokemon to the end regardless of id. id 0, for example, could be pushed after id 999, which I despise
+ * 2) update 'addPokemon' method to have proper logic for determining the proper
+ * - 'num' and 'evolutions'
+ * 3) update 'addPokemon' to sort any newly added Pokemon to the proper index
+ * - (currently, just pushes all)
+ * - new Pokemon to the end regardless of id. id 0, for example, could be pushed
+ * - after id 999, which I despise
  * 4) update 'getPokemonByType' method to handle multiple types
  */
 
@@ -53,23 +56,21 @@ const headPokemon = (request, response) => {
 // returns the Pokemon if found along with a 200
 // returns an empty object if the JSON is empty (not loaded in) (200)
 const getPokemonById = (request, response, id) => {
-
   // if the JSON never loaded in, return an empty object
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
   }
 
   // look for the id and return the proper Pokemon if found or nothing if not found
-  const pokemon = pokemonJSON.find(p => p.id === parseInt(id));
+  const pokemon = pokemonJSON.find((p) => p.id === Number(id));
 
   if (pokemon) respondJSON(request, response, 200, pokemon);
   respondJSON(request, response, 200, {});
-
 };
 
 // HEAD function for getPokemonById
 // returns a success 200
-const headPokemonById = (request, response, id) => {
+const headPokemonById = (request, response) => {
   respondJSON(request, response, 200, {});
 };
 
@@ -77,23 +78,21 @@ const headPokemonById = (request, response, id) => {
 // returns the Pokemon along with a 200 (could be empty if not found)
 // returns an empty object if the JSON is empty (not loaded in) (200)
 const getPokemonByName = (request, response, name) => {
-
   // return empty if JSON not loaded
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
   }
 
-  // else, return pokemon or empty 
-  const pokemon = pokemonJSON.find(p => p.name.toLowerCase() === name.toLowerCase());
+  // else, return pokemon or empty
+  const pokemon = pokemonJSON.find((p) => p.name.toLowerCase() === name.toLowerCase());
 
   if (pokemon) respondJSON(request, response, 200, pokemon);
   respondJSON(request, response, 200, {});
-
 };
 
 // HEAD function for getPokemonByName
-// returns a success 
-const headPokemonByName = (request, response, name) => {
+// returns a success
+const headPokemonByName = (request, response) => {
   respondJSON(request, response, 200, {});
 };
 
@@ -105,7 +104,7 @@ const getPokemonByHeight = (request, response, height) => {
     respondJSON(request, response, 200, {});
   }
 
-  const pokemon = pokemonJSON.filter(p => p.height === height);
+  const pokemon = pokemonJSON.filter((p) => p.height === height);
 
   if (pokemon) respondJSON(request, response, 200, pokemon);
   respondJSON(request, response, 200, {});
@@ -113,7 +112,7 @@ const getPokemonByHeight = (request, response, height) => {
 
 // HEAD function for getPokemonByHeight
 // returns a success
-const headPokemonByHeight = (request, response, height) => {
+const headPokemonByHeight = (request, response) => {
   respondJSON(request, response, 200, {});
 };
 
@@ -121,12 +120,11 @@ const headPokemonByHeight = (request, response, height) => {
 // returns the Pokemon (plural) if found along with a 200
 // returns an empty object if the JSON is empty (not loaded in) (200)
 const getPokemonByWeight = (request, response, weight) => {
-
   if (Object.keys(pokemonJSON).length === 0) {
-    respondJSON(request, response, 200, responseObj);
+    respondJSON(request, response, 200, {});
   }
 
-  const pokemon = pokemonJSON.filter(p => p.weight === weight);
+  const pokemon = pokemonJSON.filter((p) => p.weight === weight);
 
   if (pokemon) respondJSON(request, response, 200, pokemon);
   respondJSON(request, response, 200, {});
@@ -134,16 +132,15 @@ const getPokemonByWeight = (request, response, weight) => {
 
 // HEAD function for getPokemonByWeight
 // returns a success
-const headPokemonByWeight = (request, response, weight) => {
-  respondJSON(request, response, status, {});
+const headPokemonByWeight = (request, response) => {
+  respondJSON(request, response, 200, {});
 };
 
 // function for handling response for GET getPokemonByType
 // SHOULD: return a success and possibly an object if any types are found to match
 // CURRENTLY: returns empty because I can't get the logic down right now for handling
 // multiple types
-const getPokemonByType = (request, response, type) => {
-
+const getPokemonByType = (request, response) => {
   const responseObj = [];
 
   if (Object.keys(pokemonJSON).length === 0) {
@@ -155,7 +152,7 @@ const getPokemonByType = (request, response, type) => {
   // will get back to logic at later date
   /*  for (const pokemon of pokemonJSON) {
      if (pokemon.type.includes(type)) {
-       responseObj.push(pokemon); 
+       responseObj.push(pokemon);
      }
    } */
   respondJSON(request, response, 200, responseObj);
@@ -163,7 +160,7 @@ const getPokemonByType = (request, response, type) => {
 
 // HEAD function for getPokemonByType
 // returns a success
-const headPokemonByType = (request, response, type) => {
+const headPokemonByType = (request, response) => {
   respondJSON(request, response, 200, {});
 };
 
@@ -174,7 +171,9 @@ const errorMessage = (params) => `you done messed up${params}`;
 
 // helper function to determine if a pokemon being added already has the same id
 // placeholder for now
-const determineDUpe = (id) => false;
+// const determineDupe = (id) = <something something>
+// had to remove 'id' because of the linter
+const determineDupe = () => false;
 
 // function for handling POST addPokemon responses to:
 // add a pokemon to the data (201), update an existing mon (204)
@@ -193,8 +192,9 @@ const addPokemon = (request, response) => {
 
     // check for required params, and return a 400 with custom error code
     // if something doesn't add up (missing crucial information) or duplicate id
-    if ((!params.id || !params.name || !params.img || !params.type || !params.height || !params.weight) || determineDupe(params.id)) {
-
+    if ((!params.id || !params.name || !params.img || !params.type || !params.height
+       || !params.weight)
+       || determineDupe(params.id)) {
       const responseObj = {
         message: errorMessage(params),
         id: 'pokemonMissingParams',
@@ -202,7 +202,7 @@ const addPokemon = (request, response) => {
       return respondJSON(request, response, 400, responseObj);
     }
 
-    // create the new pokemon for the JSON, but don't add it yet! 
+    // create the new pokemon for the JSON, but don't add it yet!
     // still have to check if its an update or not
     const newPokemon = {
       id: params.id,
@@ -217,36 +217,37 @@ const addPokemon = (request, response) => {
       type: params.type,
       height: params.height,
       weight: params.weight,
-      weaknesses: determineWeaknesses(params.type)
+
+      // determinedWeaknesses is not real - yet
+      // to be added eventually
+      // weaknesses: determineWeaknesses(params.type),
 
       // evolution not yet implemented as im unsure at this moment
       // how to account for those that don't have them
-      //evolution: something something idk yet
+      // evolution: something something idk yet
     };
 
     // look and try to find a Pokemon with the same id, taking note of the index
     // if index is not -1, that means we are UPDATING
-    const index = pokemonJSON.findIndex(p => p.id === parseInt(params.id));
+    const index = pokemonJSON.findIndex((p) => p.id === Number(params.id));
 
     // update check
     // if = update
     // else = add
     if (index !== -1) {
       pokemonJSON[index] = newPokemon;
-      respondJSON(request, response, 204, { message: 'Succesfully updated Pokemon!', id: 'pokemonUpdated' });
-    } else {
-      pokemonJSON.push(newPokemon);
-      respondJSON(request, response, 201, { message: 'Succesfully Added Pokemon!', id: 'pokemonAdded' });
+      return respondJSON(request, response, 204, { message: 'Succesfully updated Pokemon!', id: 'pokemonUpdated' });
     }
+    pokemonJSON.push(newPokemon);
+    return respondJSON(request, response, 201, { message: 'Succesfully Added Pokemon!', id: 'pokemonAdded' });
   });
 };
 
 // function for handling POST deletePokemon
 // returns a 204 if found, or returns a 400 if the id isn't valid
 const deletePokemon = (request, response, id) => {
-
   // try to find the Mon, an index of -1 means it's nonexistent
-  const index = pokemonJSON.findIndex(p => p.id === parseInt(id));
+  const index = pokemonJSON.findIndex((p) => p.id === Number(id));
   if (index !== -1) {
     pokemonJSON.splice(index, 1);
     respondJSON(request, response, 204, { message: 'Pokemon deleted!', id: 'pokemonDeleted' });
@@ -263,7 +264,6 @@ const notFound = (request, response) => {
   };
   respondJSON(request, response, 404, responseObj);
 };
-
 
 module.exports = {
   getPokemon,
