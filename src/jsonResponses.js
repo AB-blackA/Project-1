@@ -137,24 +137,17 @@ const headPokemonByWeight = (request, response) => {
 };
 
 // function for handling response for GET getPokemonByType
-// SHOULD: return a success and possibly an object if any types are found to match
-// CURRENTLY: returns empty because I can't get the logic down right now for handling
-// multiple types
-const getPokemonByType = (request, response) => {
-  const responseObj = [];
+// returns a 200 code and the found pokemon, or an empty array if none
+// match (should be impossible for the latter currently)
+const getPokemonByType = (request, response, type1) => {
+  let responseObj = [];
 
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, responseObj);
   }
 
-  // Loop through pokemonJSON to find matches
-  // doesn't account for dual types at the moment
-  // will get back to logic at later date
-  /*  for (const pokemon of pokemonJSON) {
-     if (pokemon.type.includes(type)) {
-       responseObj.push(pokemon);
-     }
-   } */
+  responseObj = pokemonJSON.filter((p) => p.type.includes(type1));
+
   respondJSON(request, response, 200, responseObj);
 };
 
@@ -170,10 +163,51 @@ const headPokemonByType = (request, response) => {
 const errorMessage = (params) => `you done messed up${params}`;
 
 // helper function to determine if a pokemon being added already has the same id
-// placeholder for now
-// const determineDupe = (id) = <something something>
-// had to remove 'id' because of the linter
-const determineDupe = () => false;
+// returns TRUE if a dupe is found, FALSE otherwise
+const determineDupe = (id) => {
+  const dupe = pokemonJSON.filter((p) => p.id === id);
+
+  return !(dupe.length > 0);
+};
+
+// function for determining the weakness based off the types
+// not functional yet, should be moved to external utilities
+/* const determineWeaknesses = (types) => {
+
+  const normal = 0;
+  const fighting = 1;
+  const flying = 2;
+  const poison = 3;
+  const ground = 4;
+  const rock = 5;
+  const bug = 6;
+  const ghost = 7;
+  const fire = 8;
+  const water = 9;
+  const grass = 10;
+  const electric = 11;
+  const psychic = 12;
+  const ice = 13;
+  const dragon = 14;
+
+  const typeMatchupChart = [
+  // N,Fi,Fl,Po,Gd, R, B,Gh,Fr, W,Gs, E,Py, I, D
+    [1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1], // normal
+    [1, 1, 2, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 1, 1], // fighting
+    [1, 0.5, 1, 1, 0, 2, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1], // flying
+    [1, 0.5, 1, 0.5, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1], // poison
+    [1, 1, 1, 0.5, 1, 0.5, 1, 1, 1, 2, 2, 0, 1, 2, 1], // ground
+    [1, 2, 0.5, 1, 2, 1, 1, 1, 0.5, 2, 2, 1, 1, 1, 1], // rock
+    [1, 0.5, 2, 2, 0.5, 2, 1, 1, 2, 1, 0.5, 1, 1, 1], // bug
+    [0, 0, 1, 0.5, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 1, 1], // ghost
+    [], // fire
+
+  ]
+
+  let weaknesses = [types];
+
+  return weaknesses;
+} */
 
 // function for handling POST addPokemon responses to:
 // add a pokemon to the data (201), update an existing mon (204)
@@ -193,8 +227,8 @@ const addPokemon = (request, response) => {
     // check for required params, and return a 400 with custom error code
     // if something doesn't add up (missing crucial information) or duplicate id
     if ((!params.id || !params.name || !params.img || !params.type || !params.height
-       || !params.weight)
-       || determineDupe(params.id)) {
+      || !params.weight)
+      || determineDupe(params.id)) {
       const responseObj = {
         message: errorMessage(params),
         id: 'pokemonMissingParams',
