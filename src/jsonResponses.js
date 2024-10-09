@@ -172,8 +172,7 @@ const determineDupe = (id) => {
 
 // function for determining the weakness based off the types
 // not functional yet, should be moved to external utilities
-/* const determineWeaknesses = (types) => {
-
+const determineWeaknesses = (types) => {
   const normal = 0;
   const fighting = 1;
   const flying = 2;
@@ -191,7 +190,7 @@ const determineDupe = (id) => {
   const dragon = 14;
 
   const typeMatchupChart = [
-  // N,Fi,Fl,Po,Gd, R, B,Gh,Fr, W,Gs, E,Py, I, D
+    // N,Fi,Fl,Po,Gd, R, B,Gh,Fr, W,Gs, E,Py, I, D
     [1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1], // normal
     [1, 1, 2, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 1, 1], // fighting
     [1, 0.5, 1, 1, 0, 2, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1], // flying
@@ -200,14 +199,68 @@ const determineDupe = (id) => {
     [1, 2, 0.5, 1, 2, 1, 1, 1, 0.5, 2, 2, 1, 1, 1, 1], // rock
     [1, 0.5, 2, 2, 0.5, 2, 1, 1, 2, 1, 0.5, 1, 1, 1], // bug
     [0, 0, 1, 0.5, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 1, 1], // ghost
-    [], // fire
+    [1, 1, 1, 1, 2, 2, 0.5, 1, 0.5, 2, 0.5, 1, 1, 1, 1], // fire
+    [1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 2, 2, 1, 0.5, 1], // water
+    [1, 1, 2, 2, 0.5, 1, 2, 1, 2, 0.5, 0.5, 0.5, 1, 2, 1], // grass
+    [1, 1, 0.5, 1, 2, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1], // electric
+    [1, 0.5, 1, 1, 1, 1, 2, 0, 1, 1, 1, 0.5, 1, 1], // psychic
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1], // ice
+    [1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 1, 2, 2], // dragon
+  ];
 
-  ]
+  // arrays for weaknesses
+  // base = first type based in
+  let baseWeaknesses;
 
-  let weaknesses = [types];
+  // combined = weakness chart after multiplying second type weaknesses by base type
+  // initialized for mapping multiplication within function if needed
+  let combinedWeaknesses;
 
-  return weaknesses;
-} */
+  // determine weakness through a forEach
+  types.forEach((type) => {
+    const lowerCaseType = type.toLowerCase();
+
+    // find the index of the proper type as defined above
+    const typeIndex = {
+      normal,
+      fighting,
+      flying,
+      poison,
+      ground,
+      rock,
+      bug,
+      ghost,
+      fire,
+      water,
+      grass,
+      electric,
+      psychic,
+      ice,
+      dragon,
+    }[lowerCaseType];
+
+    // check if we're doing the first type (baseWeakness.length === 0 only possible this way)
+    if (typeIndex !== undefined) {
+      if (baseWeaknesses.length === 0) {
+        baseWeaknesses = (typeMatchupChart[typeIndex]);
+
+        // otherwise, multiply the second type by instantiating combinedWeaknesses
+        // to values 1 (so it doesn't mess up the multiplication) and then map it such that
+        // it is multiplied by both the baseWeaknesses and the new weakness of the second type
+      } else {
+        combinedWeaknesses = (typeMatchupChart[typeIndex]);
+        combinedWeaknesses = combinedWeaknesses.map(
+          (weakness, index) => weakness * baseWeaknesses[index],
+        );
+      }
+    }
+  });
+
+  if (combinedWeaknesses.length === 0) {
+    return baseWeaknesses;
+  }
+  return combinedWeaknesses;
+};
 
 // function for handling POST addPokemon responses to:
 // add a pokemon to the data (201), update an existing mon (204)
@@ -251,10 +304,7 @@ const addPokemon = (request, response) => {
       type: params.type,
       height: params.height,
       weight: params.weight,
-
-      // determinedWeaknesses is not real - yet
-      // to be added eventually
-      // weaknesses: determineWeaknesses(params.type),
+      weaknesses: determineWeaknesses(params.type),
 
       // evolution not yet implemented as im unsure at this moment
       // how to account for those that don't have them
