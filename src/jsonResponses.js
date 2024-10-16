@@ -59,13 +59,15 @@ const getPokemonById = (request, response, id) => {
   // if the JSON never loaded in, return an empty object
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
+  } else {
+    // look for the id and return the proper Pokemon if found or nothing if not found
+    const pokemon = pokemonJSON.find((p) => p.id === Number(id));
+
+    if (pokemon) respondJSON(request, response, 200, pokemon);
+    else {
+      respondJSON(request, response, 200, {});
+    }
   }
-
-  // look for the id and return the proper Pokemon if found or nothing if not found
-  const pokemon = pokemonJSON.find((p) => p.id === Number(id));
-
-  if (pokemon) respondJSON(request, response, 200, pokemon);
-  respondJSON(request, response, 200, {});
 };
 
 // HEAD function for getPokemonById
@@ -81,13 +83,15 @@ const getPokemonByName = (request, response, name) => {
   // return empty if JSON not loaded
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
+  } else {
+    // else, return pokemon or empty
+    const pokemon = pokemonJSON.find((p) => p.name.toLowerCase() === name.toLowerCase());
+
+    if (pokemon) respondJSON(request, response, 200, pokemon);
+    else {
+      respondJSON(request, response, 200, {});
+    }
   }
-
-  // else, return pokemon or empty
-  const pokemon = pokemonJSON.find((p) => p.name.toLowerCase() === name.toLowerCase());
-
-  if (pokemon) respondJSON(request, response, 200, pokemon);
-  respondJSON(request, response, 200, {});
 };
 
 // HEAD function for getPokemonByName
@@ -102,12 +106,14 @@ const headPokemonByName = (request, response) => {
 const getPokemonByHeight = (request, response, height) => {
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
+  } else {
+    const pokemon = pokemonJSON.filter((p) => p.height === height);
+
+    if (pokemon) respondJSON(request, response, 200, pokemon);
+    else {
+      respondJSON(request, response, 200, {});
+    }
   }
-
-  const pokemon = pokemonJSON.filter((p) => p.height === height);
-
-  if (pokemon) respondJSON(request, response, 200, pokemon);
-  respondJSON(request, response, 200, {});
 };
 
 // HEAD function for getPokemonByHeight
