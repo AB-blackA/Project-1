@@ -2,18 +2,81 @@
 <html lang="en">
 
 <head>
-  <title>Our simple HTTP server</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon API</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 
 <body>
   <h1>API Client Page</h1>
 
-  <div class="dropdown" id="getAllPokemon">
-    <div class="title" onclick="toggleDropdown('getAllPokemon')">Function 1</div>
+  <div class="dropdown" id="getPokemon">
+    <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
     <div class="dropdown-content">
-      <button onclick="jsonFunction('GET', 'jsonFunction')">GET</button>
-      <button onclick="jsonFunction('HEAD', 'jsonFunction')">HEAD</button>
+      <button onclick="makeRequest('GET', 'getPokemon')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemon')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="getPokemonById">
+    <div class="title" onclick="toggleDropdown('getPokemonById')">Get Pokemon By ID</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('GET', 'getPokemonById')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonById')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="getPokemonByName">
+    <div class="title" onclick="toggleDropdown('getPokemonByName')">Get Pokemon By Name</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('GET', 'getPokemonByName')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByName')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="getPokemonByHeight">
+    <div class="title" onclick="toggleDropdown('getPokemonByHeight')">Get Pokemon By Height</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('GET', 'getPokemonByHeight')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByHeight')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="getPokemonByWeight">
+    <div class="title" onclick="toggleDropdown('getPokemonByWeight')">Get Pokemon By Weight</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('GET', 'getPokemonByWeight')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByWeight')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="getPokemonByType">
+    <div class="title" onclick="toggleDropdown('getPokemonByType')">Get Pokemon By Type</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('GET', 'getPokemonByType')">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByType')">HEAD</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="addPokemon">
+    <div class="title" onclick="toggleDropdown('addPokemon')">Add Pokemon</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('POST', 'addPokemon')">POST</button>
+      <div class="body">Response will be shown here</div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="deletePokemon">
+    <div class="title" onclick="toggleDropdown('deletePokemon')">Delete Pokemon</div>
+    <div class="dropdown-content">
+      <button onclick="makeRequest('POST', 'deletePokemon')">POST</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>

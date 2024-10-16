@@ -22,7 +22,8 @@ body {
 }
 
 .dropdown {
-  float: left;
+  text-align: left;
+  display: block;
   overflow: hidden;
 }
 
@@ -37,4 +38,20 @@ body {
 
 .show {
   display: block
+}
+
+.title {
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+button {
+  margin: 5px;
+}
+
+
+.body {
+  margin-top: 10px;
+  color: #555;
 }
