@@ -2,20 +2,19 @@
  * Since: 10/4/24
  * Purpose: jsonResponses handles GET, HEAD, and POST requests for an API
  * regarding Pokemon data
- * TO DO LIST
- * 1) update and move utility functions NOT related to json responses to a different file
- * - currently, this is determineDupes, determineWeaknesses, and errorMessage
- * 2) update 'addPokemon' method to have proper logic for determining the proper
- * - 'num' and 'evolutions'
- * 3) update 'addPokemon' to sort any newly added Pokemon to the proper index
- * - (currently, just pushes all)
- * - new Pokemon to the end regardless of id. id 0, for example, could be pushed
- * - after id 999, which I despise
- * 4) update 'getPokemonByType' method to handle multiple types
  */
 
+// utility functions import
+const {
+  determineDupe,
+  determineWeaknesses,
+  errorMessage,
+  convertIdToNum,
+  insertPokemon,
+} = require('./utilities.js');
+
 // storage of Pokemon added by client side
-const pokemonJSON = require('../data/pokedex.json');
+let pokemonJSON = require('../data/pokedex.json');
 
 // function for handling JSON responses
 const respondJSON = (request, response, status, object) => {
@@ -128,12 +127,14 @@ const headPokemonByHeight = (request, response) => {
 const getPokemonByWeight = (request, response, weight) => {
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
+  } else {
+    const pokemon = pokemonJSON.filter((p) => p.weight === weight);
+
+    if (pokemon) respondJSON(request, response, 200, pokemon);
+    else {
+      respondJSON(request, response, 200, {});
+    }
   }
-
-  const pokemon = pokemonJSON.filter((p) => p.weight === weight);
-
-  if (pokemon) respondJSON(request, response, 200, pokemon);
-  respondJSON(request, response, 200, {});
 };
 
 // HEAD function for getPokemonByWeight
@@ -150,122 +151,17 @@ const getPokemonByType = (request, response, type1) => {
 
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, responseObj);
+  } else {
+    responseObj = pokemonJSON.filter((p) => p.type.includes(type1));
+
+    respondJSON(request, response, 200, responseObj);
   }
-
-  responseObj = pokemonJSON.filter((p) => p.type.includes(type1));
-
-  respondJSON(request, response, 200, responseObj);
 };
 
 // HEAD function for getPokemonByType
 // returns a success
 const headPokemonByType = (request, response) => {
   respondJSON(request, response, 200, {});
-};
-
-// helper function for determining what issues were with pokemon creation
-// should have logic to determine what params are wrong to help user
-// currently A PLACEHOLDER
-const errorMessage = (params) => `you done messed up${params}`;
-
-// helper function to determine if a pokemon being added already has the same id
-// returns TRUE if a dupe is found, FALSE otherwise
-const determineDupe = (id) => {
-  const dupe = pokemonJSON.filter((p) => p.id === id);
-
-  return !(dupe.length > 0);
-};
-
-// function for determining the weakness based off the types
-// not functional yet, should be moved to external utilities
-const determineWeaknesses = (types) => {
-  const normal = 0;
-  const fighting = 1;
-  const flying = 2;
-  const poison = 3;
-  const ground = 4;
-  const rock = 5;
-  const bug = 6;
-  const ghost = 7;
-  const fire = 8;
-  const water = 9;
-  const grass = 10;
-  const electric = 11;
-  const psychic = 12;
-  const ice = 13;
-  const dragon = 14;
-
-  const typeMatchupChart = [
-    // N,Fi,Fl,Po,Gd, R, B,Gh,Fr, W,Gs, E,Py, I, D
-    [1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1], // normal
-    [1, 1, 2, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 1, 1], // fighting
-    [1, 0.5, 1, 1, 0, 2, 0.5, 1, 1, 1, 0.5, 2, 1, 2, 1], // flying
-    [1, 0.5, 1, 0.5, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1], // poison
-    [1, 1, 1, 0.5, 1, 0.5, 1, 1, 1, 2, 2, 0, 1, 2, 1], // ground
-    [1, 2, 0.5, 1, 2, 1, 1, 1, 0.5, 2, 2, 1, 1, 1, 1], // rock
-    [1, 0.5, 2, 2, 0.5, 2, 1, 1, 2, 1, 0.5, 1, 1, 1], // bug
-    [0, 0, 1, 0.5, 1, 1, 0.5, 2, 1, 1, 1, 1, 1, 1, 1], // ghost
-    [1, 1, 1, 1, 2, 2, 0.5, 1, 0.5, 2, 0.5, 1, 1, 1, 1], // fire
-    [1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 2, 2, 1, 0.5, 1], // water
-    [1, 1, 2, 2, 0.5, 1, 2, 1, 2, 0.5, 0.5, 0.5, 1, 2, 1], // grass
-    [1, 1, 0.5, 1, 2, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1], // electric
-    [1, 0.5, 1, 1, 1, 1, 2, 0, 1, 1, 1, 0.5, 1, 1], // psychic
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1], // ice
-    [1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 1, 2, 2], // dragon
-  ];
-
-  // arrays for weaknesses
-  // base = first type based in
-  let baseWeaknesses;
-
-  // combined = weakness chart after multiplying second type weaknesses by base type
-  // initialized for mapping multiplication within function if needed
-  let combinedWeaknesses;
-
-  // determine weakness through a forEach
-  types.forEach((type) => {
-    const lowerCaseType = type.toLowerCase();
-
-    // find the index of the proper type as defined above
-    const typeIndex = {
-      normal,
-      fighting,
-      flying,
-      poison,
-      ground,
-      rock,
-      bug,
-      ghost,
-      fire,
-      water,
-      grass,
-      electric,
-      psychic,
-      ice,
-      dragon,
-    }[lowerCaseType];
-
-    // check if we're doing the first type (baseWeakness.length === 0 only possible this way)
-    if (typeIndex !== undefined) {
-      if (baseWeaknesses.length === 0) {
-        baseWeaknesses = (typeMatchupChart[typeIndex]);
-
-        // otherwise, multiply the second type by instantiating combinedWeaknesses
-        // to values 1 (so it doesn't mess up the multiplication) and then map it such that
-        // it is multiplied by both the baseWeaknesses and the new weakness of the second type
-      } else {
-        combinedWeaknesses = (typeMatchupChart[typeIndex]);
-        combinedWeaknesses = combinedWeaknesses.map(
-          (weakness, index) => weakness * baseWeaknesses[index],
-        );
-      }
-    }
-  });
-
-  if (combinedWeaknesses.length === 0) {
-    return baseWeaknesses;
-  }
-  return combinedWeaknesses;
 };
 
 // function for handling POST addPokemon responses to:
@@ -287,7 +183,7 @@ const addPokemon = (request, response) => {
     // if something doesn't add up (missing crucial information) or duplicate id
     if ((!params.id || !params.name || !params.img || !params.type || !params.height
       || !params.weight)
-      || determineDupe(params.id)) {
+      || determineDupe(params.id, pokemonJSON)) {
       const responseObj = {
         message: errorMessage(params),
         id: 'pokemonMissingParams',
@@ -304,17 +200,14 @@ const addPokemon = (request, response) => {
       // has a trailing '0' if id is less than 99.
       // this requires fixing and is kept in for the check up because
       // i am tired
-      num: params.id,
+      num: convertIdToNum(params.id),
       name: params.name,
       img: params.img,
       type: params.type,
       height: params.height,
       weight: params.weight,
       weaknesses: determineWeaknesses(params.type),
-
-      // evolution not yet implemented as im unsure at this moment
-      // how to account for those that don't have them
-      // evolution: something something idk yet
+      evolution: params.evolutions && params.evolutions.length ? params.evolutions : [],
     };
 
     // look and try to find a Pokemon with the same id, taking note of the index
@@ -328,7 +221,7 @@ const addPokemon = (request, response) => {
       pokemonJSON[index] = newPokemon;
       return respondJSON(request, response, 204, { message: 'Succesfully updated Pokemon!', id: 'pokemonUpdated' });
     }
-    pokemonJSON.push(newPokemon);
+    pokemonJSON = insertPokemon(pokemonJSON, newPokemon);
     return respondJSON(request, response, 201, { message: 'Succesfully Added Pokemon!', id: 'pokemonAdded' });
   });
 };
