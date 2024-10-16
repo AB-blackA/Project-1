@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon API Descriptions</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+    <h1>API Client Function Descriptions</h1>
+
+    <div class="dropdown" id="getPokemon">
+        <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a list of all Pokemon from the API.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="getPokemonById">
+        <div class="title" onclick="toggleDropdown('getPokemonById')">Get Pokemon By ID</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a specific Pokemon based on the provided ID.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="getPokemonByName">
+        <div class="title" onclick="toggleDropdown('getPokemonByName')">Get Pokemon By Name</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a specific Pokemon based on the provided name.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="getPokemonByHeight">
+        <div class="title" onclick="toggleDropdown('getPokemonByHeight')">Get Pokemon By Height</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a list of Pokemon based on the specified height.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="getPokemonByWeight">
+        <div class="title" onclick="toggleDropdown('getPokemonByWeight')">Get Pokemon By Weight</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a list of Pokemon based on the specified weight.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="getPokemonByType">
+        <div class="title" onclick="toggleDropdown('getPokemonByType')">Get Pokemon By Type</div>
+        <div class="dropdown-content">
+            <p>This function retrieves a list of Pokemon based on the specified type.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="addPokemon">
+        <div class="title" onclick="toggleDropdown('addPokemon')">Add Pokemon</div>
+        <div class="dropdown-content">
+            <p>This function allows you to add a new Pokemon to the API with the specified attributes, including ID,
+                Name, Image, Type(s), Height, Weight, and optional Evolutions.</p>
+        </div>
+    </div>
+
+    <div class="dropdown" id="deletePokemon">
+        <div class="title" onclick="toggleDropdown('deletePokemon')">Delete Pokemon</div>
+        <div class="dropdown-content">
+            <p>This function allows you to delete a Pokemon from the API based on the provided ID.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            document.getElementById(id).querySelector('.dropdown-content').classList.toggle("show");
+        }
+    </script>
+</body>

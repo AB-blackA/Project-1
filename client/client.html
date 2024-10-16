@@ -23,8 +23,9 @@
   <div class="dropdown" id="getPokemonById">
     <div class="title" onclick="toggleDropdown('getPokemonById')">Get Pokemon By ID</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemonById')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonById')">HEAD</button>
+      <input type="number" placeholder="Enter Pokemon ID" id="idInputById">
+      <button onclick="makeRequest('GET', 'getPokemonById', idInputById.value)">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonById', idInputById.value)">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -32,8 +33,9 @@
   <div class="dropdown" id="getPokemonByName">
     <div class="title" onclick="toggleDropdown('getPokemonByName')">Get Pokemon By Name</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemonByName')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByName')">HEAD</button>
+      <input type="text" placeholder="Enter Pokemon Name" id="nameInput">
+      <button onclick="makeRequest('GET', 'getPokemonByName', nameInput.value)">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByName', nameInput.value)">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -41,8 +43,9 @@
   <div class="dropdown" id="getPokemonByHeight">
     <div class="title" onclick="toggleDropdown('getPokemonByHeight')">Get Pokemon By Height</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemonByHeight')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByHeight')">HEAD</button>
+      <input type="number" placeholder="Enter Height" id="heightInput">
+      <button onclick="makeRequest('GET', 'getPokemonByHeight', heightInput.value)">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByHeight', heightInput.value)">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -50,8 +53,9 @@
   <div class="dropdown" id="getPokemonByWeight">
     <div class="title" onclick="toggleDropdown('getPokemonByWeight')">Get Pokemon By Weight</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemonByWeight')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByWeight')">HEAD</button>
+      <input type="number" placeholder="Enter Weight" id="weightInput">
+      <button onclick="makeRequest('GET', 'getPokemonByWeight', weightInput.value)">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByWeight', weightInput.value)">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -59,8 +63,26 @@
   <div class="dropdown" id="getPokemonByType">
     <div class="title" onclick="toggleDropdown('getPokemonByType')">Get Pokemon By Type</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemonByType')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByType')">HEAD</button>
+      <select id="typeInput">
+        <option value="">Select Type</option>
+        <option value="normal">Normal</option>
+        <option value="fighting">Fighting</option>
+        <option value="flying">Flying</option>
+        <option value="poison">Poison</option>
+        <option value="ground">Ground</option>
+        <option value="rock">Rock</option>
+        <option value="bug">Bug</option>
+        <option value="ghost">Ghost</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="psychic">Psychic</option>
+        <option value="ice">Ice</option>
+        <option value="dragon">Dragon</option>
+      </select>
+      <button onclick="makeRequest('GET', 'getPokemonByType', typeInput.value)">GET</button>
+      <button onclick="makeRequest('HEAD', 'getPokemonByType', typeInput.value)">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -68,7 +90,59 @@
   <div class="dropdown" id="addPokemon">
     <div class="title" onclick="toggleDropdown('addPokemon')">Add Pokemon</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('POST', 'addPokemon')">POST</button>
+      <input type="number" placeholder="Enter ID" id="addIdInput">
+      <input type="text" placeholder="Enter Name" id="addNameInput">
+      <input type="text" placeholder="Enter Image URL" id="addImageInput">
+      <select id="addType1Input">
+        <option value="">Select Type 1</option>
+        <option value="normal">Normal</option>
+        <option value="fighting">Fighting</option>
+        <option value="flying">Flying</option>
+        <option value="poison">Poison</option>
+        <option value="ground">Ground</option>
+        <option value="rock">Rock</option>
+        <option value="bug">Bug</option>
+        <option value="ghost">Ghost</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="psychic">Psychic</option>
+        <option value="ice">Ice</option>
+        <option value="dragon">Dragon</option>
+      </select>
+      <select id="addType2Input">
+        <option value="">Select Type 2 (optional)</option>
+        <option value="normal">Normal</option>
+        <option value="fighting">Fighting</option>
+        <option value="flying">Flying</option>
+        <option value="poison">Poison</option>
+        <option value="ground">Ground</option>
+        <option value="rock">Rock</option>
+        <option value="bug">Bug</option>
+        <option value="ghost">Ghost</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="psychic">Psychic</option>
+        <option value="ice">Ice</option>
+        <option value="dragon">Dragon</option>
+      </select>
+      <input type="number" placeholder="Enter Height" id="addHeightInput">
+      <input type="number" placeholder="Enter Weight" id="addWeightInput">
+      <input type="text" placeholder="Enter Evolution 1 (optional)" id="addEvolution1Input">
+      <input type="text" placeholder="Enter Evolution 2 (optional)" id="addEvolution2Input">
+      <button onclick="makeRequest('POST', 'addPokemon', {
+        id: addIdInput.value,
+        name: addNameInput.value,
+        img: addImageInput.value,
+        type1: addType1Input.value,
+        type2: addType2Input.value,
+        height: addHeightInput.value,
+        weight: addWeightInput.value,
+        next_evolution: [addEvolution1Input.value, addEvolution2Input.value]
+      })">Add Pokemon</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -76,10 +150,12 @@
   <div class="dropdown" id="deletePokemon">
     <div class="title" onclick="toggleDropdown('deletePokemon')">Delete Pokemon</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('POST', 'deletePokemon')">POST</button>
+      <input type="number" placeholder="Enter ID to Delete" id="deleteIdInput">
+      <button onclick="makeRequest('POST', 'deletePokemon', { id: deleteIdInput.value })">Delete Pokemon</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
+
 
   <script>
 

@@ -16,6 +16,7 @@ const fs = require('fs'); // pull in the file system module
 // want to do it on startup.
 // This not the best way to load files unless you have few files.
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
+const desc = fs.readFileSync(`${__dirname}/../client/descriptions.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
 // function to get the index page
@@ -32,8 +33,16 @@ const getCSS = (request, response) => {
   response.end();
 };
 
+// function to get the descriptions page
+const getDesc = (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write(desc);
+  response.end();
+};
+
 // set out public exports
 module.exports = {
   getIndex,
   getCSS,
+  getDesc,
 };

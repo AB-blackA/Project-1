@@ -19,6 +19,7 @@ const urlStruct = {
   GET: {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
+    '/descriptions': htmlHandler.getDesc,
     // returns all Pokemon
     '/getPokemon': jsonHandler.getPokemon,
 
