@@ -14,9 +14,9 @@
   <div class="dropdown" id="getPokemon">
     <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
     <div class="dropdown-content">
-      <button onclick="makeRequest('GET', 'getPokemon')">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemon')">HEAD</button>
-      <div class="body">Response will be shown here</div>
+      <button id="getPokemonGetBtn">GET</button>
+      <button id="getPokemonHeadBtn">HEAD</button>
+      <div class="body" id="getPkmnBody">Response will be shown here</div>
     </div>
   </div>
 
@@ -24,8 +24,8 @@
     <div class="title" onclick="toggleDropdown('getPokemonById')">Get Pokemon By ID</div>
     <div class="dropdown-content">
       <input type="number" placeholder="Enter Pokemon ID" id="idInputById">
-      <button onclick="makeRequest('GET', 'getPokemonById', idInputById.value)">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonById', idInputById.value)">HEAD</button>
+      <button id="getPokemonByIdGetBtn">GET</button>
+      <button id="getPokemonByIdHeadBtn">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -34,8 +34,8 @@
     <div class="title" onclick="toggleDropdown('getPokemonByName')">Get Pokemon By Name</div>
     <div class="dropdown-content">
       <input type="text" placeholder="Enter Pokemon Name" id="nameInput">
-      <button onclick="makeRequest('GET', 'getPokemonByName', nameInput.value)">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByName', nameInput.value)">HEAD</button>
+      <button id="getPokemonByNameGetBtn">GET</button>
+      <button id="getPokemonByNameHeadBtn">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -44,8 +44,8 @@
     <div class="title" onclick="toggleDropdown('getPokemonByHeight')">Get Pokemon By Height</div>
     <div class="dropdown-content">
       <input type="number" placeholder="Enter Height" id="heightInput">
-      <button onclick="makeRequest('GET', 'getPokemonByHeight', heightInput.value)">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByHeight', heightInput.value)">HEAD</button>
+      <button id="getPokemonByHeightGetBtn">GET</button>
+      <button id="getPokemonByHeightHeadBtn">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -54,8 +54,8 @@
     <div class="title" onclick="toggleDropdown('getPokemonByWeight')">Get Pokemon By Weight</div>
     <div class="dropdown-content">
       <input type="number" placeholder="Enter Weight" id="weightInput">
-      <button onclick="makeRequest('GET', 'getPokemonByWeight', weightInput.value)">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByWeight', weightInput.value)">HEAD</button>
+      <button id="getPokemonByWeightGetBtn">GET</button>
+      <button id="getPokemonByWeightHeadBtn">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -81,8 +81,8 @@
         <option value="ice">Ice</option>
         <option value="dragon">Dragon</option>
       </select>
-      <button onclick="makeRequest('GET', 'getPokemonByType', typeInput.value)">GET</button>
-      <button onclick="makeRequest('HEAD', 'getPokemonByType', typeInput.value)">HEAD</button>
+      <button id="getPokemonByTypeGetBtn">GET</button>
+      <button id="getPokemonByTypeHeadBtn">HEAD</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -133,16 +133,7 @@
       <input type="number" placeholder="Enter Weight" id="addWeightInput">
       <input type="text" placeholder="Enter Evolution 1 (optional)" id="addEvolution1Input">
       <input type="text" placeholder="Enter Evolution 2 (optional)" id="addEvolution2Input">
-      <button onclick="makeRequest('POST', 'addPokemon', {
-        id: addIdInput.value,
-        name: addNameInput.value,
-        img: addImageInput.value,
-        type1: addType1Input.value,
-        type2: addType2Input.value,
-        height: addHeightInput.value,
-        weight: addWeightInput.value,
-        next_evolution: [addEvolution1Input.value, addEvolution2Input.value]
-      })">Add Pokemon</button>
+      <button id="addPokemonBtn">Add Pokemon</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
@@ -151,22 +142,318 @@
     <div class="title" onclick="toggleDropdown('deletePokemon')">Delete Pokemon</div>
     <div class="dropdown-content">
       <input type="number" placeholder="Enter ID to Delete" id="deleteIdInput">
-      <button onclick="makeRequest('POST', 'deletePokemon', { id: deleteIdInput.value })">Delete Pokemon</button>
+      <button id="deletePokemonBtn">Delete Pokemon</button>
       <div class="body">Response will be shown here</div>
     </div>
   </div>
 
-
   <script>
-
     function toggleDropdown(id) {
       document.getElementById(id).querySelector('.dropdown-content').classList.toggle("show");
     }
+    const truncate = (response) => {
+      return response.length > 10000 ? response.substring(0, 1000) + '...' : response;
+    };
 
-    function jsonFunction(method, functionName) {
 
-      // placeholder
-    }
+    const handleGetPokemon = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPkmnBody');
+      var response;
+      try {
+        if (method === 'GET') {
+          response = await fetch('/getPokemon', {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch('headPokemon', {
+            method,
+          })
+        }
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\n
+            Response: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: 200\n
+            Response: HEAD request successful. No response body.`;
+          }
+        } else if (response.status === 404) {
+          const errorData = await response.json();
+          messageOutput.innerText = `Status: 404\n
+          JSON.stringify(errorData)`;
+        }
+      } catch (error) {
+        console.error('Error fetching allPokemon:', error);
+      }
+    };
+
+    const handleGetPokemonById = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPokemonById').querySelector('.body');
+      const idInput = document.getElementById('idInputById').value;
+      var response;
+      try {
+        if (method === 'GET') {
+          response = await fetch(`/getPokemonById/${idInput}`, {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch(`/headPokemonById/${idInput}`, {
+            method,
+          });
+        }
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: ${response.status}`;
+          }
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleGetPokemonByName = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPokemonByName').querySelector('.body');
+      const nameInput = document.getElementById('nameInput').value;
+      var response;
+      try {
+        if (method === 'GET') {
+          response = await fetch(`/getPokemonByName/${nameInput}`, {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch(`/headPokemonByName/${nameInput}`, {
+            method,
+          });
+        }
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: ${response.status}`;
+          }
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleGetPokemonByHeight = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPokemonByHeight').querySelector('.body');
+      let heightInput = document.getElementById('heightInput').value;
+      heightInput = parseFloat(heightInput);
+      heightInput = heightInput < 1 ? `0.${heightInput.toFixed(2)}` : heightInput.toFixed(2);
+      var response;
+      try {
+        if (method === 'GET') {
+          response = await fetch(`/getPokemonByHeight/${heightInput}`, {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch(`/headPokemonByHeight/${heightInput}`, {
+            method,
+          });
+        }
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: ${response.status}`;
+          }
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleGetPokemonByWeight = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPokemonByWeight').querySelector('.body');
+      let weightInput = document.getElementById('weightInput').value;
+      weightInput = parseFloat(weightInput).toFixed(1);
+      var response;
+      try {
+        if (method === 'GET') {
+          response = await fetch(`/getPokemonByWeight/${weightInput}`, {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch(`/headPokemonByWeight/${weightInput}`, {
+            method,
+          });
+        }
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: ${response.status}`;
+          }
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleGetPokemonByType = async (event, method) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('getPokemonByType').querySelector('.body');
+      const typeInput = document.getElementById('typeInput').value;
+      var response;
+
+      console.log(`Fetching from URL: /getPokemonByType/${typeInput}`);
+
+      try {
+        if (method === 'GET') {
+          response = await fetch(`/getPokemonByType/${typeInput}`, {
+            method,
+          });
+        } else if (method === 'HEAD') {
+          response = await fetch(`/headPokemonByType`, {
+            method,
+          });
+        }
+
+        console.log('made it here');
+
+        if (response.ok) {
+          if (method === 'GET') {
+            const data = await response.json();
+            messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
+          } else {
+            messageOutput.innerText = `Status: ${response.status}`;
+          }
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleAddPokemon = async (event) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('addPokemon').querySelector('.body');
+      const idInput = document.getElementById('addIdInput').value;
+      const nameInput = document.getElementById('addNameInput').value;
+      const imageInput = document.getElementById('addImageInput').value;
+      const type1Input = document.getElementById('addType1Input').value;
+      const type2Input = document.getElementById('addType2Input').value;
+      const heightInput = document.getElementById('addHeightInput').value;
+      const weightInput = document.getElementById('addWeightInput').value;
+      const evolution1Input = document.getElementById('addEvolution1Input').value;
+      const evolution2Input = document.getElementById('addEvolution2Input').value;
+
+      const newPokemon = {
+        id: idInput,
+        name: nameInput,
+        img: imageInput,
+        type: [type1Input, type2Input],
+        height: heightInput,
+        weight: weightInput,
+        next_evolution: [evolution1Input, evolution2Input].filter(Boolean),
+      };
+
+      try {
+        const response = await fetch('/addPokemon', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newPokemon),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          messageOutput.innerText = `Success: ${truncate(JSON.stringify(data))}`;
+        } else {
+          messageOutput.innerText = `Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+    const handleDeletePokemon = async (event) => {
+      event.preventDefault();
+
+      const messageOutput = document.getElementById('deletePokemon').querySelector('.body');
+      const idInput = document.getElementById('deleteIdInput').value;
+
+      try {
+        const response = await fetch(`/deletePokemon/${idInput}`, {
+          method: 'POST',
+        });
+
+        if (response.status === 204) {
+          // 204 No Content means the Pokemon was successfully deleted
+          messageOutput.innerText = 'Success: Pokemon deleted!';
+        } else if (response.status === 400) {
+          // 400 Bad Request means the Pokemon ID was invalid
+          const data = await response.json();
+          messageOutput.innerText = `Error: ${data.message}`;
+        } else {
+          messageOutput.innerText = `Unexpected Error: ${response.status}`;
+        }
+      } catch (error) {
+        messageOutput.innerText = `Error: ${error.message}`;
+      }
+    };
+
+
+    window.onload = () => {
+      // Setting up event listeners
+      document.getElementById('getPokemonByIdGetBtn').onclick = (event) => handleGetPokemonById(event, 'GET');
+      document.getElementById('getPokemonByIdHeadBtn').onclick = (event) => handleGetPokemonById(event, 'HEAD');
+
+      document.getElementById('getPokemonByNameGetBtn').onclick = (event) => handleGetPokemonByName(event, 'GET');
+      document.getElementById('getPokemonByNameHeadBtn').onclick = (event) => handleGetPokemonByName(event, 'HEAD');
+
+      document.getElementById('getPokemonByHeightGetBtn').onclick = (event) => handleGetPokemonByHeight(event, 'GET');
+      document.getElementById('getPokemonByHeightHeadBtn').onclick = (event) => handleGetPokemonByHeight(event, 'HEAD');
+
+      document.getElementById('getPokemonByWeightGetBtn').onclick = (event) => handleGetPokemonByWeight(event, 'GET');
+      document.getElementById('getPokemonByWeightHeadBtn').onclick = (event) => handleGetPokemonByWeight(event, 'HEAD');
+
+      document.getElementById('getPokemonByTypeGetBtn').onclick = (event) => handleGetPokemonByType(event, 'GET');
+      document.getElementById('getPokemonByTypeHeadBtn').onclick = (event) => handleGetPokemonByType(event, 'HEAD');
+
+      document.getElementById('getPokemonGetBtn').onclick = (event) => handleGetPokemon(event, 'GET');
+      document.getElementById('getPokemonHeadBtn').onclick = (event) => handleGetPokemon(event, 'HEAD');
+
+      document.getElementById('addPokemonBtn').onclick = handleAddPokemon;
+
+      document.getElementById('deletePokemonBtn').onclick = handleDeletePokemon;
+    };
   </script>
 </body>
 

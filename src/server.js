@@ -20,6 +20,7 @@ const urlStruct = {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getCSS,
     '/descriptions': htmlHandler.getDesc,
+
     // returns all Pokemon
     '/getPokemon': jsonHandler.getPokemon,
 
@@ -27,8 +28,8 @@ const urlStruct = {
     '/getPokemonById': jsonHandler.getPokemonById,
     '/getPokemonByName': jsonHandler.getPokemonByName,
     '/getPokemonByHeight': jsonHandler.getPokemonByHeight,
-    '/getPokemonByWeight': jsonHandler.getPokemonByHeight,
-    '/getPokemonByType': jsonHandler.getPokemonByHeight,
+    '/getPokemonByWeight': jsonHandler.getPokemonByWeight,
+    '/getPokemonByType': jsonHandler.getPokemonByType,
   },
   HEAD: {
     '/headPokemon': jsonHandler.headPokemon,
@@ -52,12 +53,22 @@ const onRequest = (request, response) => {
 
   // determine request method, then call the appropriate function from urlStruct
   const method = request.method.toUpperCase();
+  const pathParts = parsedUrl.pathname.split('/').filter(Boolean); // filter to remove empty strings
 
   if (urlStruct[method] && urlStruct[method][parsedUrl.pathname]) {
     urlStruct[method][parsedUrl.pathname](request, response, parsedUrl);
   } else {
-    // default return 404 notFound
-    urlStruct.notFound(request, response);
+    // Check for parameterized URL
+    const lastPart = pathParts[pathParts.length - 1]; // Get the last segment of the URL
+    const basePath = '/' + pathParts.slice(0, -1).join('/'); // Get the base path without the last part
+
+    if (urlStruct[method] && urlStruct[method][basePath]) {
+      // call the function with the last segment as a parameter
+      urlStruct[method][basePath](request, response, lastPart);
+    } else {
+      // default return 404 notFound
+      urlStruct.notFound(request, response);
+    }
   }
 };
 

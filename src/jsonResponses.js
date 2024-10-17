@@ -106,6 +106,9 @@ const getPokemonByHeight = (request, response, height) => {
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
   } else {
+
+    height = `${height} m`;
+
     const pokemon = pokemonJSON.filter((p) => p.height === height);
 
     if (pokemon) respondJSON(request, response, 200, pokemon);
@@ -128,6 +131,8 @@ const getPokemonByWeight = (request, response, weight) => {
   if (Object.keys(pokemonJSON).length === 0) {
     respondJSON(request, response, 200, {});
   } else {
+
+    weight = `${weight} kg`;
     const pokemon = pokemonJSON.filter((p) => p.weight === weight);
 
     if (pokemon) respondJSON(request, response, 200, pokemon);
