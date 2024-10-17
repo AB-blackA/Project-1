@@ -4,73 +4,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokemon API Descriptions</title>
+    <title>API Reference</title>
     <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 
 <body>
-    <h1>API Client Function Descriptions</h1>
+    <h1>API Descriptions</h1>
 
     <div class="dropdown" id="getPokemon">
         <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
         <div class="dropdown-content">
-            <p>This function retrieves a list of all Pokemon from the API.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoint:</strong> /getPokemon, /headPokemon</p>
+            <p><strong>Returns:</strong> A JSON array of Pokémon objects.</p>
+            <p><strong>Format:</strong> [{ id: number, name: string, img: string, type: [string], height: number,
+                weight: number, weaknesses: [string], next_evolution?: [object] }] </p>
+
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemon</p>
+            <p>Result: Status: 200
+                Response:
+                [{"id":1,"num":"001","name":"Bulbasaur","img":"http://www.serebii.net/pokemongo/pokemon/001.png","type":["Grass","Poison"],"height":"0.71
+                m","weight":"6.9
+                kg","weaknesses":["Fire","Ice","Flying","Psychic"],"next_evolution":[{"num":"002","name":"Ivysaur"},{"num":"003","name":"Venusaur"}]},{"id":2,"num":"002","name":"Ivysaur","img":"http://www.serebii.net/pokemongo/pokemon/002.png","type":["Grass","Poison"],"height":"0.99
+                m","weight":"13.0
+                kg","weaknesses":["Fire","Ice","Flying","Psychic"],"next_evolution":[{"num":"003","name":"Venusaur"}]},{"id":3,"num":"003","name":"Venusaur","img":"http://www.serebii.net/pokemongo/pokemon/003.png","type":["Grass","Poison"],"height":"2.01
+                m","weight":"100.0
+                kg","weaknesses":["Fire","Ice","Flying","Psychic"]},{"id":4,"num":"004","name":"Charmander","img":"http://www.serebii.net/pokemongo/pokemon/004.png","type":["Fire"],"height":"0.61
+                m","weight":"8.5
+                kg","weaknesses":["Water","Ground","Rock"],"next_evolution":[{"num":"005","name":"Charmeleon"},...] </p>
+            <p>Request: /headPokemon</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="getPokemonById">
         <div class="title" onclick="toggleDropdown('getPokemonById')">Get Pokemon By ID</div>
         <div class="dropdown-content">
-            <p>This function retrieves a specific Pokemon based on the provided ID.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoints:</strong> /getPokemonById/{id}, /headPokemonById</p>
+            <p><strong>Returns:</strong> A JSON object of the requested Pokémon.</p>
+            <p><strong>Format:</strong> { id: number, name: string, img: string, type: [string], height: number, weight:
+                number, weaknesses: [string], next_evolution?: [object] }</p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemonById/1</p>
+            <p>Result: Status: 200
+                Response: { "id": 1, "num": "001", "name": "Bulbasaur", "img":
+                "http://www.serebii.net/pokemongo/pokemon/001.png", "type": ["Grass", "Poison"], "height": "0.71 m",
+                "weight": "6.9 kg", "weaknesses": ["Fire", "Ice", "Flying", "Psychic"], "next_evolution": [{"num":
+                "002", "name": "Ivysaur"}, {"num": "003", "name": "Venusaur"}] }</p>
+            <p>Request: /headPokemonById</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="getPokemonByName">
         <div class="title" onclick="toggleDropdown('getPokemonByName')">Get Pokemon By Name</div>
         <div class="dropdown-content">
-            <p>This function retrieves a specific Pokemon based on the provided name.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoint:</strong> /getPokemonByName/{name}, /headPokemonByName</p>
+            <p><strong>Returns:</strong> A JSON object of the requested Pokémon.</p>
+            <p><strong>Format:</strong> { id: number, name: string, img: string, type: [string], height: number, weight:
+                number, weaknesses: [string], next_evolution?: [object] }</p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemonByName/Bulbasaur</p>
+            <p>Result: Status: 200
+                Response: { "id": 1, "num": "001", "name": "Bulbasaur", "img":
+                "http://www.serebii.net/pokemongo/pokemon/001.png", "type": ["Grass", "Poison"], "height": "0.71 m",
+                "weight": "6.9 kg", "weaknesses": ["Fire", "Ice", "Flying", "Psychic"], "next_evolution": [{"num":
+                "002", "name": "Ivysaur"}, {"num": "003", "name": "Venusaur"}] }</p>
+            <p>Request: /headPokemonByName</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="getPokemonByHeight">
         <div class="title" onclick="toggleDropdown('getPokemonByHeight')">Get Pokemon By Height</div>
         <div class="dropdown-content">
-            <p>This function retrieves a list of Pokemon based on the specified height.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoint:</strong> /getPokemonByHeight/{height}, /headPokemonByHeight</p>
+            <p><strong>Returns:</strong> A JSON array of Pokémon matching the specified height.</p>
+            <p><strong>Format:</strong> [{ id: number, name: string, img: string, type: [string], height: number,
+                weight: number, weaknesses: [string], next_evolution?: [object] }] </p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemonByHeight/0.51</p>
+            <p>Result: Status: 200
+                Response:{"id": 7,"num": "007","name": "Squirtle","img": "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
+                "Water"],"height": "0.51 m","weight": "9.0 kg","weaknesses": ["Electric","Grass"],"next_evolution": [{
+                "num": "008","name": "Wartortle"},{"num": "009","name": "Blastoise"}]
+                }, </p>
+            <p>Request: /headPokemonByHeight/0.7</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="getPokemonByWeight">
         <div class="title" onclick="toggleDropdown('getPokemonByWeight')">Get Pokemon By Weight</div>
         <div class="dropdown-content">
-            <p>This function retrieves a list of Pokemon based on the specified weight.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoint:</strong> /getPokemonByWeight/{weight}, /headPokemonByWeight</p>
+            <p><strong>Returns:</strong> A JSON array of Pokémon matching the specified weight.</p>
+            <p><strong>Format:</strong> [{ id: number, name: string, img: string, type: [string], height: number,
+                weight: number, weaknesses: [string], next_evolution?: [object] }] </p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemonByWeight/9.0</p>
+            <p>Result: Status: 200
+                Response:{"id": 7,"num": "007","name": "Squirtle","img": "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
+                "Water"],"height": "0.51 m","weight": "9.0 kg","weaknesses": ["Electric","Grass"],"next_evolution": [{
+                "num": "008","name": "Wartortle"},{"num": "009","name": "Blastoise"}]
+                }, </p>
+            <p>Request: /headPokemonByWeight/6.9</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="getPokemonByType">
         <div class="title" onclick="toggleDropdown('getPokemonByType')">Get Pokemon By Type</div>
         <div class="dropdown-content">
-            <p>This function retrieves a list of Pokemon based on the specified type.</p>
+            <p><strong>Method:</strong> GET, HEAD</p>
+            <p><strong>Endpoint:</strong> /getPokemonByType/{type}, /headPokemonByType</p>
+            <p><strong>Returns:</strong> A JSON array of Pokémon matching the specified type.</p>
+            <p><strong>Format:</strong> [{ id: number, name: string, img: string, type: [string], height: number,
+                weight: number, weaknesses: [string], next_evolution?: [object] }] </p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /getPokemonByType/Grass</p>
+            <p>Result: Status: 200
+                Response: [{ "id": 1, "num": "001", "name": "Bulbasaur", "img":
+                "http://www.serebii.net/pokemongo/pokemon/001.png", "type": ["Grass", "Poison"], "height": "0.71 m",
+                "weight": "6.9 kg", "weaknesses": ["Fire", "Ice", "Flying", "Psychic"], "next_evolution": [{"num":
+                "002", "name": "Ivysaur"}, {"num": "003", "name": "Venusaur"}] }, ...]</p>
+            <p>Request: /headPokemonByType</p>
+            <p>Result: Status: 200
+                Response: {}
+            </p>
         </div>
     </div>
 
     <div class="dropdown" id="addPokemon">
         <div class="title" onclick="toggleDropdown('addPokemon')">Add Pokemon</div>
         <div class="dropdown-content">
-            <p>This function allows you to add a new Pokemon to the API with the specified attributes, including ID,
-                Name, Image, Type(s), Height, Weight, and optional Evolutions.</p>
+            <p><strong>Method:</strong> POST</p>
+            <p><strong>Endpoint:</strong> /addPokemon</p>
+            <p><strong>Body Parameters:</strong> ID, Name, Image URL, Types, Height, Weight, Evolutions (optional).</p>
+            <p><strong>Returns:</strong> Confirmation message.</p>
+            <p><strong>Examples:</strong></p>
+            <p>I don't work :[</p>
+            <div class="body">Response will be shown here</div>
         </div>
     </div>
 
     <div class="dropdown" id="deletePokemon">
         <div class="title" onclick="toggleDropdown('deletePokemon')">Delete Pokemon</div>
         <div class="dropdown-content">
-            <p>This function allows you to delete a Pokemon from the API based on the provided ID.</p>
+            <p><strong>Method:</strong> DELETE</p>
+            <p><strong>Endpoint:</strong> /deletePokemon/{id}</p>
+            <p><strong>Returns:</strong> Confirmation of deletion.</p>
+            <p><strong>Examples:</strong></p>
+            <p>Request: /deletePokemon/2</p>
+            <p>Result: { Success: 'Pokemon deleted successfully.' }</p>
+            <p>Request: /deletePokemon/2</p>
+            <p>Result: { Error: Invalid Pokemon ID for deletion' }</p>
+            <div class="body">Response will be shown here</div>
         </div>
     </div>
 
     <script>
+        // toggleDropDown for the (you guessed it) dropdown divs
         function toggleDropdown(id) {
-            document.getElementById(id).querySelector('.dropdown-content').classList.toggle("show");
+            const dropdownContent = document.querySelector(`#${id} .dropdown-content`);
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
         }
     </script>
 </body>
+
+</html>

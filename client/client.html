@@ -148,13 +148,25 @@
   </div>
 
   <script>
+
+    /*Author: Andrew Black
+     *Since: 10/16/24
+     *Purpose: script handles all of the client side requests to server.js, and a couple others
+     */
+
+     // toggle dropdown divs
     function toggleDropdown(id) {
       document.getElementById(id).querySelector('.dropdown-content').classList.toggle("show");
     }
+
+    // truncate long json responses to not overcrowd the page
     const truncate = (response) => {
       return response.length > 10000 ? response.substring(0, 1000) + '...' : response;
     };
 
+    // below are the GET/HEAD requests
+    // all of them do a similar thing: go find the params, and send the request to 
+    // server.js and await a response
 
     const handleGetPokemon = async (event, method) => {
       event.preventDefault();
@@ -203,7 +215,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonById/${idInput}`, {
+          response = await fetch(`/headPokemonById}`, {
             method,
           });
         }
@@ -235,7 +247,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByName/${nameInput}`, {
+          response = await fetch(`/headPokemonByName}`, {
             method,
           });
         }
@@ -269,7 +281,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByHeight/${heightInput}`, {
+          response = await fetch(`/headPokemonByHeight}`, {
             method,
           });
         }
@@ -302,7 +314,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByWeight/${weightInput}`, {
+          response = await fetch(`/headPokemonByWeight}`, {
             method,
           });
         }
@@ -359,6 +371,10 @@
       }
     };
 
+    // below are the POST requests
+    // they are a little more unique, handleAddPokemon is supposed to add but doesn't work (I am too tired to
+    // try and fix it, i should have just put all the data in the header instead of trying to use a body)
+
     const handleAddPokemon = async (event) => {
       event.preventDefault();
 
@@ -403,6 +419,8 @@
       }
     };
 
+    // delete pokemon straight up deletes pokemon, or lets you know if it can't be deleted
+
     const handleDeletePokemon = async (event) => {
       event.preventDefault();
 
@@ -415,15 +433,11 @@
         });
 
         if (response.status === 204) {
-          // 204 No Content means the Pokemon was successfully deleted
-          messageOutput.innerText = 'Success: Pokemon deleted!';
-        } else if (response.status === 400) {
-          // 400 Bad Request means the Pokemon ID was invalid
-          const data = await response.json();
-          messageOutput.innerText = `Error: ${data.message}`;
+          messageOutput.innerText = `{ message: 'Pokemon deleted!', id: 'pokemonDeleted' }`;
         } else {
-          messageOutput.innerText = `Unexpected Error: ${response.status}`;
-        }
+          const data = await response.json();
+          messageOutput.innerText = JSON.stringify(data);
+        } 
       } catch (error) {
         messageOutput.innerText = `Error: ${error.message}`;
       }

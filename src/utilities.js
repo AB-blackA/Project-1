@@ -1,3 +1,9 @@
+/* Author: Andrew Black
+   Since: 10/16/24
+   Purpose: Utilities.js helps jsonResponses.js in determining some params and/or other odd
+   functionalities
+*/
+
 // helper function to determine if a pokemon being added already has the same id
 // returns TRUE if a dupe is found, FALSE otherwise
 const determineDupe = (id, pokemonJSON) => {
