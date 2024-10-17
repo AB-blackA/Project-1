@@ -11,6 +11,8 @@
 <body>
     <h1>API Descriptions</h1>
 
+    <a href="/client">Go to API Client Page</a>
+
     <div class="dropdown" id="getPokemon">
         <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
         <div class="dropdown-content">
@@ -95,7 +97,8 @@
             <p><strong>Examples:</strong></p>
             <p>Request: /getPokemonByHeight/0.51</p>
             <p>Result: Status: 200
-                Response:{"id": 7,"num": "007","name": "Squirtle","img": "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
+                Response:{"id": 7,"num": "007","name": "Squirtle","img":
+                "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
                 "Water"],"height": "0.51 m","weight": "9.0 kg","weaknesses": ["Electric","Grass"],"next_evolution": [{
                 "num": "008","name": "Wartortle"},{"num": "009","name": "Blastoise"}]
                 }, </p>
@@ -117,11 +120,12 @@
             <p><strong>Examples:</strong></p>
             <p>Request: /getPokemonByWeight/9.0</p>
             <p>Result: Status: 200
-                Response:{"id": 7,"num": "007","name": "Squirtle","img": "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
+                Response:{"id": 7,"num": "007","name": "Squirtle","img":
+                "http://www.serebii.net/pokemongo/pokemon/007.png","type": [
                 "Water"],"height": "0.51 m","weight": "9.0 kg","weaknesses": ["Electric","Grass"],"next_evolution": [{
                 "num": "008","name": "Wartortle"},{"num": "009","name": "Blastoise"}]
                 }, </p>
-            <p>Request: /headPokemonByWeight/6.9</p>
+            <p>Request: /headPokemonByWeight</p>
             <p>Result: Status: 200
                 Response: {}
             </p>
@@ -171,9 +175,9 @@
             <p><strong>Returns:</strong> Confirmation of deletion.</p>
             <p><strong>Examples:</strong></p>
             <p>Request: /deletePokemon/2</p>
-            <p>Result: { Success: 'Pokemon deleted successfully.' }</p>
+            <p>Result: { message: 'Pokemon deleted!', id: 'pokemonDeleted' }</p>
             <p>Request: /deletePokemon/2</p>
-            <p>Result: { Error: Invalid Pokemon ID for deletion' }</p>
+            <p>Result: {"message":"Invalid Pokemon ID for deletion","id":"pokemonIDInvalid"}</p>
             <div class="body">Response will be shown here</div>
         </div>
     </div>

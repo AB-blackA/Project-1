@@ -10,6 +10,7 @@
 
 <body>
   <h1>API Client Page</h1>
+  <a href="/descriptions">Go to API Descriptions</a>
 
   <div class="dropdown" id="getPokemon">
     <div class="title" onclick="toggleDropdown('getPokemon')">Get Pokemon</div>
@@ -154,7 +155,7 @@
      *Purpose: script handles all of the client side requests to server.js, and a couple others
      */
 
-     // toggle dropdown divs
+    // toggle dropdown divs
     function toggleDropdown(id) {
       document.getElementById(id).querySelector('.dropdown-content').classList.toggle("show");
     }
@@ -190,13 +191,10 @@
             messageOutput.innerText = `Status: 200\n
             Response: ${truncate(JSON.stringify(data))}`;
           } else {
-            messageOutput.innerText = `Status: 200\n
-            Response: HEAD request successful. No response body.`;
+            messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
           }
-        } else if (response.status === 404) {
-          const errorData = await response.json();
-          messageOutput.innerText = `Status: 404\n
-          JSON.stringify(errorData)`;
+        } else {
+          messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
         }
       } catch (error) {
         console.error('Error fetching allPokemon:', error);
@@ -215,7 +213,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonById}`, {
+          response = await fetch(`/headPokemonById`, {
             method,
           });
         }
@@ -228,7 +226,7 @@
             messageOutput.innerText = `Status: ${response.status}`;
           }
         } else {
-          messageOutput.innerText = `Error: ${response.status}`;
+          messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
         }
       } catch (error) {
         messageOutput.innerText = `Error: ${error.message}`;
@@ -247,7 +245,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByName}`, {
+          response = await fetch(`/headPokemonByName`, {
             method,
           });
         }
@@ -257,7 +255,7 @@
             const data = await response.json();
             messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
           } else {
-            messageOutput.innerText = `Status: ${response.status}`;
+            messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
           }
         } else {
           messageOutput.innerText = `Error: ${response.status}`;
@@ -281,7 +279,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByHeight}`, {
+          response = await fetch(`/headPokemonByHeight`, {
             method,
           });
         }
@@ -294,7 +292,7 @@
             messageOutput.innerText = `Status: ${response.status}`;
           }
         } else {
-          messageOutput.innerText = `Error: ${response.status}`;
+          messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
         }
       } catch (error) {
         messageOutput.innerText = `Error: ${error.message}`;
@@ -314,7 +312,7 @@
             method,
           });
         } else if (method === 'HEAD') {
-          response = await fetch(`/headPokemonByWeight}`, {
+          response = await fetch(`/headPokemonByWeight`, {
             method,
           });
         }
@@ -324,7 +322,7 @@
             const data = await response.json();
             messageOutput.innerText = `Status: 200\nResponse: ${truncate(JSON.stringify(data))}`;
           } else {
-            messageOutput.innerText = `Status: ${response.status}`;
+            messageOutput.innerText = `Status: ${response.status}\nResponse: {}`;
           }
         } else {
           messageOutput.innerText = `Error: ${response.status}`;
@@ -437,7 +435,7 @@
         } else {
           const data = await response.json();
           messageOutput.innerText = JSON.stringify(data);
-        } 
+        }
       } catch (error) {
         messageOutput.innerText = `Error: ${error.message}`;
       }

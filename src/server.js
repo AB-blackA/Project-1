@@ -58,12 +58,12 @@ const onRequest = (request, response) => {
   if (urlStruct[method] && urlStruct[method][parsedUrl.pathname]) {
     urlStruct[method][parsedUrl.pathname](request, response, parsedUrl);
   } else {
-    // Check for parameterized URL
-    const lastPart = pathParts[pathParts.length - 1]; // Get the last segment of the URL
-    const basePath = `/${pathParts.slice(0, -1).join('/')}`; // Get the base path without the last part
+    // get the last segment of the URL
+    const lastPart = pathParts[pathParts.length - 1]; // get the last segment of the URL
+    const basePath = `/${pathParts.slice(0, -1).join('/')}`; // get the base path without the last part
 
     if (urlStruct[method] && urlStruct[method][basePath]) {
-      // call the function with the last segment as a parameter
+      // call the function with the last segment as a parameter if basePath is found
       urlStruct[method][basePath](request, response, lastPart);
     } else {
       // default return 404 notFound
