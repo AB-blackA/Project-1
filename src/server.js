@@ -60,7 +60,7 @@ const onRequest = (request, response) => {
   } else {
     // Check for parameterized URL
     const lastPart = pathParts[pathParts.length - 1]; // Get the last segment of the URL
-    const basePath = '/' + pathParts.slice(0, -1).join('/'); // Get the base path without the last part
+    const basePath = `/${pathParts.slice(0, -1).join('/')}`; // Get the base path without the last part
 
     if (urlStruct[method] && urlStruct[method][basePath]) {
       // call the function with the last segment as a parameter
